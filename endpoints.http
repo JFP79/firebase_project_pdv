@@ -1,0 +1,62 @@
+GET http://localhost:3000/clientes HTTP/1.1
+
+###
+
+GET http://localhost:3000/produtos HTTP/1.1
+
+###
+
+POST http://localhost:3000/clientes HTTP/1.1
+content-type: application/json
+
+{
+    "nome_cliente": "João Salvador",
+    "cpf": 12312312345
+}
+
+###
+
+PUT http://localhost:3000/clientes/nYEGKFNb7zq3tYFJWSZc HTTP/1.1
+content-type: application/json
+
+{
+    "nome_cliente": "João Salvador Rizzo",
+    "cpf": 12312312345
+}
+###
+DELETE http://localhost:3000/clientes/nYEGKFNb7zq3tYFJWSZc HTTP/1.1
+content-type: application/json
+
+{
+    "nome_cliente": "João Salvador Rizzo",
+    "cpf": 12312312345
+}
+
+###
+
+POST http://localhost:3000/produtos HTTP/1.1
+content-type: application/json
+
+{
+    "nome_produto": "Bananão 123",
+    "preco": 12.50
+}
+
+### 
+
+PUT http://localhost:3000/produtos/dPQQMB4K3J3IEQXnUmGc HTTP/1.1
+content-type: application/json
+
+{
+    "nome_produto": "Pureza Antartica",
+    "preco": 25.60
+}
+
+
+### 
+
+DELETE http://localhost:3000/produtos/dPQQMB4K3J3IEQXnUmGc HTTP/1.1
+content-type: application/json
+
+
+
