@@ -1,10 +1,10 @@
-import './output.css'
+import './App.css'
 
 function App() {
 
   return (
     <>
-      <div className='text-3xl'><h1>Olá Mundo</h1></div>
+      <div><h1 className='text-1xl text-[#ff0000]'>Hello world</h1></div>
     </>
   )
 }
