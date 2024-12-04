@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Customer, ItemType, Products } from '@/types/type'
-import { createCustomer, createProduct } from '@/utils/api/api'
+import { createCustomer } from '@/services/customer'
+import { createProduct } from '@/services/products'
 
 type ItemModalProps = {
   isOpen: boolean;

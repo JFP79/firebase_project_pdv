@@ -10,4 +10,26 @@ export interface Products {
   preco?: number;
 }
 
-export type ItemType = 'cliente' | 'produto';
+export interface Pdv {
+  id: string;
+  clienteId: string; 
+  produtoIds: string[];
+  valorPago: number;
+  valorTotal: number;
+  troco: number;
+}
+
+
+export interface Cupom {
+  cupom: {
+    id: string;
+    cliente: Customer[]; 
+    itens: Products[];
+    valorPago: number;
+    valorTotal: number;
+    troco: number;
+  }
+}
+
+
+export type ItemType = 'cliente' | 'produto' | 'cupom';

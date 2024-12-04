@@ -5,15 +5,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { PlusCircle, Trash2, Pencil } from 'lucide-react'
 
-import { Customer, ItemType, Products } from '@/types/type'
+import { Customer, ItemType, Products, Cupom } from '@/types/type'
 import { ItemModal } from '../modal/item-modal'
-import { getCustomers, getProducts } from '@/utils/api/api'
+import { getCustomers } from '@/services/customer'
+import { getProducts } from '@/services/products'
+import { getPdvs } from '@/services/pvd'
+import { CupomModal } from '../modal/cupon-modal'
 
 
 
 export default function SwitchableListCard() {
   const [customer, setCustomers] = useState<Customer[]>([])
   const [products, setProducts] = useState<Products[]>([])
+  const [cupons, setCupom] = useState<Cupom[]>([])
 
   const [error, setError] = useState<string | null>(null)
   const [itemType, setItemType] = useState<ItemType>('cliente')
@@ -36,9 +40,6 @@ export default function SwitchableListCard() {
     setIsModalOpen(true)
   }
 
-  /*const handleDelete = async (id: string) => {
-    console.log(id);
-  } */
 
   useEffect(() => {
     const fetchCustomersAndProducts = async () => {
@@ -46,10 +47,12 @@ export default function SwitchableListCard() {
       try {
         const customers = await getCustomers();
         const products = await getProducts();
+        const cupons = await getPdvs();
 
         setIsLoading(false);
         setCustomers(customers);
         setProducts(products);
+        setCupom(cupons);
       } catch (error) {
         console.error('Error fetching customers:', error);
         setError('Error fetching customers');
@@ -59,17 +62,22 @@ export default function SwitchableListCard() {
     fetchCustomersAndProducts();
   }, [])
 
+
+  console.log(cupons.map((cupom) => cupom.cupom.itens.map((item) => item)));
+  
+  
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle className="flex flex-row w-full justify-center items-center">
           <div className="flex w-full rounded-lg border border-input overflow-hidden">
-            <Button
+             <Button
               variant={itemType === 'cliente' ? "secondary" : "ghost"}
               className="rounded-none flex-1"
               onClick={() => setItemType('cliente')}
             >
-              Clientes
+              Cliente
             </Button>
             <Button
               variant={itemType === 'produto' ? "secondary" : "ghost"}
@@ -77,6 +85,13 @@ export default function SwitchableListCard() {
               onClick={() => setItemType('produto')}
             >
               Produtos
+            </Button>
+            <Button
+              variant={itemType === 'cupom' ? "secondary" : "ghost"}
+              className="rounded-none flex-1"
+              onClick={() => setItemType('cupom')}
+            >
+              Cupom
             </Button>
           </div>
         </CardTitle>
@@ -134,16 +149,30 @@ export default function SwitchableListCard() {
               Adicione um novo {itemType}
             </Button>
           </>
-        ) : (
-          <p>Item not found!</p>
-        )} 
+        ) : itemType === 'cupom' ? (
+          <>
+            <Button className="w-full mt-4" onClick={handleAdd}>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Adicione um novo {itemType}
+            </Button>
+          </> 
+        ) : <p>Nem um item encontrado!</p>} 
       </CardContent>
-      <ItemModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        item={itemType === 'cliente' ? editCustomer : editProduct}
-        itemType={itemType}
-      />
+      {itemType !== 'cupom' ? (
+        <ItemModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          item={itemType === 'cliente' ? editCustomer : editProduct}
+          itemType={itemType}
+        />
+      ) : (
+        <CupomModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          customers={customer}
+          products={products}
+        />
+      )}
     </Card>
   )
 }
